@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details - Admin{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <a href="{{ url_for('admin_orders') }}" class="btn btn-outline-primary mb-4">
+        <i class="fas fa-arrow-left"></i> Back to Orders
+    </a>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Order #{{ order.id }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong>Customer:</strong> {{ order.user.username }}<br>
+                            <strong>Email:</strong> {{ order.user.email }}<br>
+                            <strong>Order Date:</strong> {{ order.ordered_at.strftime('%B %d, %Y') }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Total:</strong> ₹{{ "%.2f"|format(order.total_price) }}<br>
+                            <strong>Items:</strong> {{ order.items|length }}<br>
+                            <strong>Payment Status:</strong> 
+                            <span class="badge bg-{{ 'success' if order.payment_status == 'Completed' else 'warning' }}">
+                                {{ order.payment_status }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <strong>Shipping Address:</strong>
+                    <p class="text-muted">{{ order.shipping_address }}</p>
+
+                    <hr>
+
+                    <h6>Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items %}
+                                    <tr>
+                                        <td>{{ item.product.name }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>₹{{ "%.2f"|format(item.price) }}</td>
+                                        <td>₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Update Status</h5>
+                </div>
+                <form method="post">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Order Status</label>
+                            <select class="form-select" name="status" required>
+                                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                                <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

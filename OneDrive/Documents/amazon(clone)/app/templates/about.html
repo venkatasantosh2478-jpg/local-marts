@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Local Marts{% endblock %}
+
+{% block content %}
+<style>
+    .about-header {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .about-header h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #FFD700;
+    }
+    
+    .about-section {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        line-height: 1.8;
+    }
+    
+    .about-section h3 {
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 700;
+        font-size: 1.8rem;
+    }
+    
+    .about-section p {
+        color: #666;
+        margin-bottom: 15px;
+        font-size: 1.05rem;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .feature-card {
+        background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+        padding: 25px;
+        border-radius: 8px;
+        text-align: center;
+        border-left: 4px solid #FFD700;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+    }
+    
+    .feature-card i {
+        font-size: 2.5rem;
+        color: #FFD700;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .feature-card h5 {
+        color: #1a1a1a;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .feature-card p {
+        color: #666;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    .cta-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .cta-section h3 {
+        color: #FFD700;
+        margin-bottom: 15px;
+    }
+    
+    .cta-section a {
+        background-color: #FFD700;
+        color: #1a1a1a;
+        padding: 12px 30px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-block;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .cta-section a:hover {
+        background-color: #ffed4e;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        .about-header h1 {
+            font-size: 2rem;
+        }
+        
+        .about-section {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="about-header">
+    <h1><i class="fas fa-store"></i> About Local Marts</h1>
+    <p style="font-size: 1.1rem; color: #b0b0b0;">Our Story & Mission</p>
+</div>
+
+<div class="container">
+    {% if settings and settings.about_us %}
+    <div class="about-section">
+        <h3><i class="fas fa-lightbulb"></i> Our Story</h3>
+        <div style="white-space: pre-line; color: #666;">{{ settings.about_us }}</div>
+    </div>
+    {% else %}
+    <div class="about-section">
+        <h3><i class="fas fa-lightbulb"></i> Our Story</h3>
+        <p>
+            Local Marts is a modern e-commerce platform dedicated to bringing you the best shopping experience. 
+            Founded with a vision to support local businesses and provide customers with quality products, 
+            we've grown to become a trusted marketplace.
+        </p>
+        <p>
+            Our mission is simple: make shopping easier, safer, and more rewarding for everyone. 
+            Whether you're looking for electronics, fashion, books, or home essentials, 
+            Local Marts has something for everyone.
+        </p>
+    </div>
+    {% endif %}
+    
+    <!-- Features Section -->
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-headset"></i>
+            <h5>24/7 Support</h5>
+            <p>Our customer service team is always ready to help you with any questions or concerns.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-truck"></i>
+            <h5>Fast Delivery</h5>
+            <p>We ensure your orders are delivered quickly and safely to your doorstep.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shield-alt"></i>
+            <h5>Secure Shopping</h5>
+            <p>Your personal and payment information is protected with latest security standards.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-undo"></i>
+            <h5>Easy Returns</h5>
+            <p>Hassle-free returns within 30 days if you're not satisfied with your purchase.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-star"></i>
+            <h5>Quality Products</h5>
+            <p>All products are carefully selected and verified for quality and authenticity.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-tag"></i>
+            <h5>Best Prices</h5>
+            <p>We offer competitive prices and regular discounts on your favorite items.</p>
+        </div>
+    </div>
+    
+    <!-- Policies Section -->
+    <div style="margin-top: 40px;">
+        {% if settings and settings.privacy_policy %}
+        <div class="about-section">
+            <h3><i class="fas fa-lock"></i> Privacy Policy</h3>
+            <div style="white-space: pre-line; color: #666;">{{ settings.privacy_policy }}</div>
+        </div>
+        {% endif %}
+        
+        {% if settings and settings.terms_conditions %}
+        <div class="about-section">
+            <h3><i class="fas fa-file-contract"></i> Terms & Conditions</h3>
+            <div style="white-space: pre-line; color: #666;">{{ settings.terms_conditions }}</div>
+        </div>
+        {% endif %}
+        
+        {% if settings and settings.return_policy %}
+        <div class="about-section">
+            <h3><i class="fas fa-exchange-alt"></i> Return Policy</h3>
+            <div style="white-space: pre-line; color: #666;">{{ settings.return_policy }}</div>
+        </div>
+        {% endif %}
+        
+        {% if settings and settings.shipping_policy %}
+        <div class="about-section">
+            <h3><i class="fas fa-shipping-fast"></i> Shipping Policy</h3>
+            <div style="white-space: pre-line; color: #666;">{{ settings.shipping_policy }}</div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <h3>Ready to Shop?</h3>
+        <p>Explore our wide range of products and enjoy a great shopping experience!</p>
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-shopping-bag"></i> Start Shopping
+        </a>
+        <a href="{{ url_for('contact') }}" style="background-color: transparent; border: 2px solid #FFD700; margin-left: 10px;">
+            <i class="fas fa-envelope"></i> Contact Us
+        </a>
+    </div>
+</div>
+{% endblock %}

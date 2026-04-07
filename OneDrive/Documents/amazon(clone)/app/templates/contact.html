@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Local Marts{% endblock %}
+
+{% block content %}
+<style>
+    .contact-header {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .contact-header h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #FFD700;
+    }
+    
+    .contact-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+    
+    .contact-info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-info-card h4 {
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .info-item {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 15px;
+    }
+    
+    .info-item i {
+        color: #FFD700;
+        font-size: 1.2rem;
+        min-width: 30px;
+    }
+    
+    .info-item a {
+        color: #1a1a1a;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .info-item a:hover {
+        color: #FFD700;
+    }
+    
+    .contact-form-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-form-card h4 {
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .form-control {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .form-control:focus {
+        border-color: #FFD700;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+    }
+    
+    .map-container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
+    
+    .map-container h4 {
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .action-buttons a, .action-buttons button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        text-align: center;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .whatsapp-btn {
+        background-color: #25D366;
+        color: white;
+        border: none;
+    }
+    
+    .whatsapp-btn:hover {
+        background-color: #1fbc56;
+        transform: translateY(-2px);
+    }
+    
+    .email-btn {
+        background-color: #FFD700;
+        color: #1a1a1a;
+        border: none;
+    }
+    
+    .email-btn:hover {
+        background-color: #ffed4e;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        .contact-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .contact-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="contact-header">
+    <h1><i class="fas fa-phone-alt"></i> Contact Us</h1>
+    <p style="font-size: 1.1rem; color: #b0b0b0;">We're here to help! Reach out to us anytime</p>
+</div>
+
+<div class="container">
+    <div class="contact-container">
+        <!-- Contact Information -->
+        <div class="contact-info-card">
+            <h4><i class="fas fa-info-circle"></i> Get In Touch</h4>
+            
+            {% if settings %}
+                {% if settings.contact_email %}
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>Email</strong><br>
+                        <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if settings.contact_phone %}
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Phone</strong><br>
+                        <a href="tel:{{ settings.contact_phone }}">{{ settings.contact_phone }}</a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if settings.whatsapp_number %}
+                <div class="info-item">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                    <div>
+                        <strong>WhatsApp</strong><br>
+                        <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Hi%20Local%20Marts" target="_blank">
+                            {{ settings.whatsapp_number }}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if settings.contact_address %}
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Address</strong><br>
+                        {{ settings.contact_address }}
+                        {% if settings.contact_city %}, {{ settings.contact_city }}{% endif %}
+                        {% if settings.contact_country %}, {{ settings.contact_country }}{% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+            
+            <hr style="margin: 30px 0;">
+            
+            <h5 style="color: #1a1a1a; margin-bottom: 15px;">Follow Us</h5>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                {% if settings %}
+                    {% if settings.facebook_url %}
+                    <a href="{{ settings.facebook_url }}" target="_blank" class="btn btn-sm" style="background-color: #1877F2; color: white;">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    {% endif %}
+                    {% if settings.instagram_url %}
+                    <a href="{{ settings.instagram_url }}" target="_blank" class="btn btn-sm" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); color: white;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    {% endif %}
+                    {% if settings.twitter_url %}
+                    <a href="{{ settings.twitter_url }}" target="_blank" class="btn btn-sm" style="background-color: #1DA1F2; color: white;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                    {% if settings.linkedin_url %}
+                    <a href="{{ settings.linkedin_url }}" target="_blank" class="btn btn-sm" style="background-color: #0A66C2; color: white;">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    {% endif %}
+                    {% if settings.youtube_url %}
+                    <a href="{{ settings.youtube_url }}" target="_blank" class="btn btn-sm" style="background-color: #FF0000; color: white;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="contact-form-card">
+            <h4><i class="fas fa-envelope"></i> Send us a Message</h4>
+            <form method="POST">
+                <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                <input type="tel" class="form-control" name="phone" placeholder="Your Phone (Optional)">
+                <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                <textarea class="form-control" name="message" rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn btn-warning w-100" style="font-weight: 700; padding: 12px;">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Map -->
+    {% if settings and settings.map_url %}
+    <div class="map-container">
+        <h4><i class="fas fa-map"></i> Find Us on Map</h4>
+        <iframe src="{{ settings.map_url }}" width="100%" height="400" style="border-radius: 6px; border: 1px solid #e0e0e0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
