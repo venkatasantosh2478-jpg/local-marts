@@ -29,9 +29,20 @@ template_dir = os.path.join(app_dir, 'templates')
 static_dir = os.path.join(app_dir, 'static')
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "amazon_clone.db")}'
+
+# Support both SQLite (local) and PostgreSQL (production on Render)
+if os.environ.get('DATABASE_URL'):
+    # Production: Use PostgreSQL on Render
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Local development: Use SQLite
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "amazon_clone.db")}'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your-secret-key-change-this'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Initialize extensions
@@ -703,4 +714,10 @@ def server_error(error):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    
+    # Get environment variables
+    debug = os.environ.get('DEBUG', 'False') == 'True'
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '127.0.0.1')
+    
+    app.run(debug=debug, host=host, port=port)
