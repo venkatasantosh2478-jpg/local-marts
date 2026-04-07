@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: local-marts
+    env: python
+    plan: free
+    buildCommand: pip install -r app/requirements.txt && cd app && python run.py
+    startCommand: cd app && gunicorn run:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.16
+      - key: PORT
+        value: 8000
+      - key: DEBUG
+        value: "False"
+
+  - type: pserv
+    name: local-marts-db
+    plan: free
+    ipAllowList: []
