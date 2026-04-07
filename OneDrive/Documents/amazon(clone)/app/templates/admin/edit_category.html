@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Category - Local Marts{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="admin-sidebar">
+                <h5 class="mb-4" style="color: #FFD700; font-weight: 700;">Admin Panel</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_products') }}">
+                        <i class="fas fa-box"></i> Products
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_orders') }}">
+                        <i class="fas fa-receipt"></i> Orders
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_users') }}">
+                        <i class="fas fa-users"></i> Users
+                    </a>
+                    <a class="nav-link active" href="{{ url_for('admin_categories') }}">
+                        <i class="fas fa-list"></i> Categories
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_settings') }}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #FFD700; border: none;">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> Edit Category: {{ category.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Category Name</strong></label>
+                            <input type="text" class="form-control" name="name" value="{{ category.name }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Description</strong></label>
+                            <textarea class="form-control" name="description" rows="4">{{ category.description or '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Font Awesome Icon</strong></label>
+                            <input type="text" class="form-control" name="icon" value="{{ category.icon or '' }}" placeholder="e.g., fas fa-star">
+                            <small class="text-muted">Use Font Awesome icon classes. Visit <a href="https://fontawesome.com/icons" target="_blank">fontawesome.com</a> to find icons.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if category.is_active %}checked{% endif %}>
+                                <label class="form-check-label" for="is_active">
+                                    <strong>Active</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a href="{{ url_for('admin_categories') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

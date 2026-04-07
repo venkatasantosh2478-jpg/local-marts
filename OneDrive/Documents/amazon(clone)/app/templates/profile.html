@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Local Marts{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                    <h5 class="card-title">{{ current_user.username }}</h5>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary btn-sm w-100">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Email:</strong><br>
+                            <p class="text-muted">{{ current_user.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Phone:</strong><br>
+                            <p class="text-muted">{{ current_user.phone or 'Not specified' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Address:</strong><br>
+                            <p class="text-muted">{{ current_user.address or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>City:</strong><br>
+                            <p class="text-muted">{{ current_user.city or 'Not specified' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Country:</strong><br>
+                            <p class="text-muted">{{ current_user.country or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Postal Code:</strong><br>
+                            <p class="text-muted">{{ current_user.postal_code or 'Not specified' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Member Since:</strong><br>
+                        <p class="text-muted">{{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mt-5 mb-3">Recent Orders</h4>
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders[:5] %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.ordered_at.strftime('%b %d, %Y') }}</td>
+                                    <td>₹{{ "%.2f"|format(order.total_price) }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if order.status == 'Delivered' else 'info' }}">
+                                            {{ order.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No orders yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
