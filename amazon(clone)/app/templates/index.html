@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Local Marts | Shop Local, Shop Smart{% endblock %}
+
+{% block content %}
+
+<!-- ============ HERO BANNER ============ -->
+<div class="hero-banner">
+    <div class="hero-content">
+        <h1 class="hero-title">
+            <span class="glow-text">Local Marts</span>
+        </h1>
+        <p class="hero-subtitle">Shop Local, Shop Smart 🛍️</p>
+        <p class="hero-description">Discover premium products from your trusted local marketplace</p>
+        <a href="#featured" class="btn btn-warning btn-lg hero-btn">
+            <i class="fas fa-arrow-down"></i> Explore Now
+        </a>
+    </div>
+    <div class="hero-overlay"></div>
+</div>
+
+<!-- ============ PROMO BANNER ============ -->
+<div class="promo-strips">
+    <div class="promo-item">
+        <i class="fas fa-shipping-fast"></i>
+        <h6>Fast Delivery</h6>
+        <p>Quick & reliable shipping</p>
+    </div>
+    <div class="promo-item">
+        <i class="fas fa-shield-alt"></i>
+        <h6>100% Secure</h6>
+        <p>Safe transactions guaranteed</p>
+    </div>
+    <div class="promo-item">
+        <i class="fas fa-undo"></i>
+        <h6>Easy Returns</h6>
+        <p>30-day return policy</p>
+    </div>
+    <div class="promo-item">
+        <i class="fas fa-headset"></i>
+        <h6>24/7 Support</h6>
+        <p>Always here to help</p>
+    </div>
+</div>
+
+<!-- ============ CATEGORY SHOWCASE ============ -->
+<div class="category-showcase">
+    <h2 class="section-title">Browse by Category</h2>
+    <div class="category-grid">
+        {% for cat_tuple in categories[:6] %}
+            {% set cat = cat_tuple[0] %}
+            <a href="{{ url_for('index', category=cat) }}" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-tag"></i>
+                </div>
+                <h5>{{ cat }}</h5>
+                <span class="category-arrow">→</span>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ============ SEARCH & FILTER SECTION ============ -->
+<div class="search-filter-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <form method="get" action="{{ url_for('index') }}" class="search-form">
+                    <input type="text" name="search" placeholder="🔍 Search products..." value="{{ search or '' }}" class="search-input">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="filter-options">
+                    <a href="{{ url_for('index') }}" class="filter-btn">All Products</a>
+                    <a href="{{ url_for('index') }}?category=Electronics" class="filter-btn">Electronics</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ FEATURED PRODUCTS ============ -->
+<div id="featured" class="featured-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Products</h2>
+            <p class="section-subtitle">Handpicked items just for you</p>
+        </div>
+
+        {% if products.items %}
+            <div class="products-grid">
+                {% for product in products.items %}
+                    <div class="product-card-wrapper">
+                        <div class="product-card">
+                            <!-- Product Image -->
+                            <div class="product-image-container">
+                                <img src="{{ product.image_url or 'https://via.placeholder.com/300x300?text=' + product.name }}" 
+                                     class="product-image" alt="{{ product.name }}">
+                                
+                                <!-- Discount Badge -->
+                                {% if product.discount_price %}
+                                    <div class="badge badge-discount">
+                                        <span class="discount-percent">-{{ product.get_discount_percentage() }}%</span>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Quick Add Button -->
+                                <div class="quick-actions">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="action-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if current_user.is_authenticated %}
+                                        <form method="POST" action="{{ url_for('add_to_wishlist', product_id=product.id) }}" style="display:inline;">
+                                            <button type="submit" class="action-btn" title="Add to Wishlist">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Product Info -->
+                            <div class="product-info">
+                                <h5 class="product-name">{{ product.name[:45] }}</h5>
+                                <p class="product-category">{{ product.category }}</p>
+                                <p class="product-desc">{{ product.description[:60] }}...</p>
+                                
+                                <!-- Rating -->
+                                <div class="product-rating">
+                                    <div class="stars">
+                                        {% for i in range(5) %}
+                                            {% if i < product.rating|int %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <span class="rating-count">({{ product.reviews_count }})</span>
+                                </div>
+
+                                <!-- Price Section -->
+                                <div class="product-price-section">
+                                    {% if product.discount_price %}
+                                        <span class="price-original">₹{{ "%.0f"|format(product.price) }}</span>
+                                        <span class="price-discount">₹{{ "%.0f"|format(product.discount_price) }}</span>
+                                    {% else %}
+                                        <span class="price-regular">₹{{ "%.0f"|format(product.price) }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Stock Status -->
+                                {% if product.stock > 0 %}
+                                    <span class="stock-badge in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                                {% else %}
+                                    <span class="stock-badge out-of-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                                {% endif %}
+
+                                <!-- Add to Cart -->
+                                {% if current_user.is_authenticated and product.stock > 0 %}
+                                    <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" style="width: 100%;">
+                                        <button type="submit" class="btn btn-warning w-100" style="margin-top: 10px;">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </button>
+                                    </form>
+                                {% elif not current_user.is_authenticated %}
+                                    <a href="{{ url_for('login') }}" class="btn btn-warning w-100" style="margin-top: 10px; display: inline-block; text-align: center;">
+                                        <i class="fas fa-sign-in-alt"></i> Login to Buy
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.pages > 1 %}
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if products.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('index', page=products.prev_num, category=category, search=search) }}">
+                                        <i class="fas fa-chevron-left"></i> Previous
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page_num in products.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num == products.page %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_num }}</span>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('index', page=page_num, category=category, search=search) }}">{{ page_num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if products.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('index', page=products.next_num, category=category, search=search) }}">
+                                        Next <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="no-products">
+                <i class="fas fa-inbox"></i>
+                <h4>No Products Found</h4>
+                <p>Try searching for something else</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- ============ TESTIMONIALS ============ -->
+<div class="testimonials-section">
+    <div class="container">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Best shopping experience! Quality products and great customer service."</p>
+                <p class="testimonial-author">- Rajesh Kumar</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Fast delivery and authentic products. Highly recommended!"</p>
+                <p class="testimonial-author">- Priya Singh</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Perfect! Love shopping on Local Marts. Great deals every time."</p>
+                <p class="testimonial-author">- Amit Patel</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ NEWSLETTER ============ -->
+<div class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-card">
+            <h3>Get Latest Updates & Exclusive Deals</h3>
+            <p>Subscribe to our newsletter for special offers</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+                <button type="submit" class="btn btn-warning">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Enhancements added in style.css */
+</style>
+
+{% endblock %}
