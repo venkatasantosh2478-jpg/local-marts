@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist - Local Marts{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">My Wishlist</h2>
+
+    {% if wishlist_items %}
+        <div class="row">
+            {% for wishlist in wishlist_items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100">
+                        <img src="{{ wishlist.product.image_url or 'https://via.placeholder.com/300x300?text=' + wishlist.product.name }}" 
+                             class="card-img-top" alt="{{ wishlist.product.name }}">
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ wishlist.product.name[:50] }}</h5>
+                            
+                            <div class="mb-2">
+                                {% if wishlist.product.discount_price %}
+                                    <span class="text-danger h5">₹{{ "%.2f"|format(wishlist.product.discount_price) }}</span>
+                                    <span class="text-muted text-decoration-line-through">₹{{ "%.2f"|format(wishlist.product.price) }}</span>
+                                {% else %}
+                                    <span class="h5">₹{{ "%.2f"|format(wishlist.product.price) }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-2">
+                                {% if wishlist.product.stock > 0 %}
+                                    <span class="badge bg-success">In Stock</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                {% endif %}
+                            </div>
+
+                            <form method="post" action="{{ url_for('add_to_cart', product_id=wishlist.product.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm w-100 mb-2" {% if wishlist.product.stock == 0 %}disabled{% endif %}>
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </form>
+
+                            <form method="post" action="{{ url_for('remove_from_wishlist', item_id=wishlist.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h5>Your wishlist is empty</h5>
+            <p>Add products to your wishlist to save them for later!</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

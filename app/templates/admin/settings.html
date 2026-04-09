@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Settings - Local Marts{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="admin-sidebar">
+                <h5 class="mb-4" style="color: #FFD700; font-weight: 700;">Admin Panel</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_products') }}">
+                        <i class="fas fa-box"></i> Products
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_orders') }}">
+                        <i class="fas fa-receipt"></i> Orders
+                    </a>
+                    <a class="nav-link" href="{{ url_for('admin_users') }}">
+                        <i class="fas fa-users"></i> Users
+                    </a>
+                    <a class="nav-link active" href="{{ url_for('admin_settings') }}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #FFD700; border: none;">
+                    <h4 class="mb-0"><i class="fas fa-cog"></i> Site Settings</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <ul class="nav nav-tabs mb-4" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#general">General</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#policies">Policies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#social">Social Media</a>
+                            </li>
+                        </ul>
+
+                        <!-- General Tab -->
+                        <div class="tab-content">
+                            <div id="general" class="tab-pane fade show active">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Site Name</strong></label>
+                                    <input type="text" class="form-control" name="site_name" value="{{ settings.site_name or 'Local Marts' }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Tagline</strong></label>
+                                    <input type="text" class="form-control" name="tagline" value="{{ settings.tagline or '' }}" placeholder="e.g., Shop Local, Shop Smart">
+                                </div>
+                            </div>
+
+                            <!-- Contact Info Tab -->
+                            <div id="contact" class="tab-pane fade">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Contact Email <span class="text-danger">*</span></strong></label>
+                                    <input type="email" class="form-control" name="contact_email" value="{{ settings.contact_email or '' }}" placeholder="business@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Contact Phone</strong></label>
+                                    <input type="tel" class="form-control" name="contact_phone" value="{{ settings.contact_phone or '' }}" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>WhatsApp Number</strong></label>
+                                    <input type="tel" class="form-control" name="whatsapp_number" value="{{ settings.whatsapp_number or '' }}" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Street Address</strong></label>
+                                    <input type="text" class="form-control" name="contact_address" value="{{ settings.contact_address or '' }}" placeholder="123 Main Street">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label"><strong>City</strong></label>
+                                        <input type="text" class="form-control" name="contact_city" value="{{ settings.contact_city or '' }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label"><strong>Country</strong></label>
+                                        <input type="text" class="form-control" name="contact_country" value="{{ settings.contact_country or '' }}">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Postal Code</strong></label>
+                                    <input type="text" class="form-control" name="contact_postal_code" value="{{ settings.contact_postal_code or '' }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Google Maps URL</strong></label>
+                                    <input type="url" class="form-control" name="map_url" value="{{ settings.map_url or '' }}" placeholder="https://goo.gl/maps/...">
+                                </div>
+                            </div>
+
+                            <!-- Policies Tab -->
+                            <div id="policies" class="tab-pane fade">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>About Us</strong></label>
+                                    <textarea class="form-control" name="about_us" rows="4">{{ settings.about_us or '' }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Return Policy</strong></label>
+                                    <textarea class="form-control" name="return_policy" rows="4">{{ settings.return_policy or '' }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Shipping Policy</strong></label>
+                                    <textarea class="form-control" name="shipping_policy" rows="4">{{ settings.shipping_policy or '' }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Privacy Policy</strong></label>
+                                    <textarea class="form-control" name="privacy_policy" rows="4">{{ settings.privacy_policy or '' }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Terms & Conditions</strong></label>
+                                    <textarea class="form-control" name="terms_conditions" rows="4">{{ settings.terms_conditions or '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Social Media Tab -->
+                            <div id="social" class="tab-pane fade">
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fab fa-facebook"></i> <strong>Facebook URL</strong></label>
+                                    <input type="url" class="form-control" name="facebook_url" value="{{ settings.facebook_url or '' }}" placeholder="https://facebook.com/...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fab fa-instagram"></i> <strong>Instagram URL</strong></label>
+                                    <input type="url" class="form-control" name="instagram_url" value="{{ settings.instagram_url or '' }}" placeholder="https://instagram.com/...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fab fa-twitter"></i> <strong>Twitter URL</strong></label>
+                                    <input type="url" class="form-control" name="twitter_url" value="{{ settings.twitter_url or '' }}" placeholder="https://twitter.com/...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fab fa-linkedin"></i> <strong>LinkedIn URL</strong></label>
+                                    <input type="url" class="form-control" name="linkedin_url" value="{{ settings.linkedin_url or '' }}" placeholder="https://linkedin.com/...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fab fa-youtube"></i> <strong>YouTube URL</strong></label>
+                                    <input type="url" class="form-control" name="youtube_url" value="{{ settings.youtube_url or '' }}" placeholder="https://youtube.com/...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning" style="font-weight: 700;">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-sidebar {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.admin-sidebar .nav-link {
+    color: #1a1a1a;
+    transition: all 0.3s ease;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    background-color: #FFD700;
+    color: #1a1a1a;
+    font-weight: 600;
+    padding-left: 15px;
+}
+
+.admin-sidebar .nav-link i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-control:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: #FFD700;
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link {
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #FFD700;
+}
+</style>
+{% endblock %}
